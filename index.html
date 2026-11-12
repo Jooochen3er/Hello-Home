@@ -162,7 +162,24 @@
         .ing-chip-critical::after { content: ' 🍼'; font-size: 0.85rem; text-decoration: none; display: inline-block; }
         .baby-branch-hint { display: block; margin-bottom: 8px; color: #0277bd; font-size: 0.85rem; background: #e1f5fe; padding: 8px 12px; border-radius: 8px; border: 1px dashed #81d4fa; line-height: 1.4; }
     
-        /* Swipe Actions */
+        
+        /* Swipe Affordance & Visual Cues */
+        .swipe-container { position: relative; overflow: hidden; border-bottom: 1px dashed var(--border); }
+        .swipe-container:last-child { border-bottom: none; }
+        .swipe-bg { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; padding: 0 20px; font-weight: 800; font-size: 0.85rem; color: #fff; z-index: 1; transition: background 0.2s; gap: 6px; }
+        .swipe-bg-right { left: 0; right: 40%; background: #81c784; justify-content: flex-start; }
+        .swipe-bg-left { right: 0; left: 40%; background: #ffb74d; justify-content: flex-end; }
+        .swipe-right-active .swipe-bg-right { background: #388e3c; }
+        .swipe-left-active .swipe-bg-left { background: #f57c00; }
+        .swipe-item { position: relative; z-index: 2; background: var(--card-bg); transform: translateX(0); width: 100%; display: flex; align-items: center; touch-action: pan-y; }
+        
+        /* Swipe Hint Badge */
+        .swipe-hint {
+            font-size: 0.7rem; color: var(--text-muted); background: var(--bg); padding: 2px 6px;
+            border-radius: 6px; margin-left: 8px; border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 2px;
+            letter-spacing: 0.3px;
+        }
+
         .swipe-container { position: relative; overflow: hidden; border-bottom: 1px dashed var(--border); }
         .swipe-container:last-child { border-bottom: none; }
         .swipe-bg { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; padding: 0 20px; font-weight: 800; font-size: 0.9rem; color: #fff; z-index: 1; transition: background 0.2s; }
@@ -442,10 +459,13 @@
             // 1. Rewe List
             let reweHTML = week.rewe.map((item, idx) => `
                 <div class="swipe-container" data-idx="${idx}" data-type="rewe">
-                    <div class="swipe-bg swipe-bg-right">✅ Abhaken</div>
+                    <div class="swipe-bg swipe-bg-right">✅ Abhaken <span>👉</span></div>
                     <div class="swipe-item check-item ${checkedState['rewe_' + idx] ? 'done' : ''}" style="padding: 12px 16px;">
                         <input type="checkbox" ${checkedState['rewe_' + idx] ? 'checked' : ''} onclick="toggleCheckLogic('${week.id}', 'rewe_${idx}'); vibe(15)">
-                        <span style="flex-grow: 1; padding-left: 12px;">${item}</span>
+                        <span style="flex-grow: 1; padding-left: 12px; display: flex; align-items: center; justify-content: space-between;">
+                            <span>${item}</span>
+                            <span class="swipe-hint">👉 Wischbar</span>
+                        </span>
                     </div>
                 </div>
             `).join('');
@@ -471,11 +491,14 @@
             document.getElementById('pantryList').innerHTML = week.pantry.map((item, idx) => {
                 const status = pantryStatus[idx];
                 return `
-                <div class="swipe-container" data-idx="${idx}" data-type="pantry">
-                    <div class="swipe-bg swipe-bg-right">✅ Hab ich</div>
-                    <div class="swipe-bg swipe-bg-left">🛒 Kaufen</div>
+                <div class="swipe-container" data-idx="${idx}" data-type="pantry" title="Nach links oder rechts wischen">
+                    <div class="swipe-bg swipe-bg-right"><span>👈</span> ✅ Hab ich</div>
+                    <div class="swipe-bg swipe-bg-left">🛒 Kaufen <span>👉</span></div>
                     <div class="swipe-item pantry-item" style="padding: 14px 16px;">
-                        <span class="pantry-item-name">${item}</span>
+                        <div style="display: flex; align-items: center; flex-grow: 1; padding-right: 12px;">
+                            <span class="pantry-item-name">${item}</span>
+                            <span class="swipe-hint">↔️ Wischbar</span>
+                        </div>
                         <div class="pantry-actions">
                             <button class="pantry-btn ${status === 'have' ? 'active-green' : ''}" onclick="setPantry('${week.id}', ${idx}, 'have')">✅ Hab ich</button>
                             <button class="pantry-btn ${status === 'buy' ? 'active-orange' : ''}" onclick="setPantry('${week.id}', ${idx}, 'buy')">🛒 Kaufen</button>

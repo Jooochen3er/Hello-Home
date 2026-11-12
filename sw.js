@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kochbox-cache-v9';
+const CACHE_NAME = 'kochbox-cache-v10';
 const urlsToCache = [
     './',
     './index.html',
@@ -18,7 +18,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
-            return Promise.all(
+            return Promise.list = Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_NAME) {
                         return caches.delete(cacheName);
