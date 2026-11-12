@@ -15,47 +15,21 @@
             --primary-light: #e8f5e9;
             --secondary: #d84315;
             --accent: #f57c00;
-            --bg: #f8f9fa;
+            --bg: #fcfaf5; /* Warmer, softer background */
             --card-bg: #ffffff;
-            --text: #212529;
-            --text-muted: #6c757d;
-            --border: #e9ecef;
-            --shadow: 0 4px 12px rgba(0,0,0,0.06);
-            --radius: 16px;
+            --text: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border: #e2e0d8;
+            --shadow: 0 8px 24px rgba(0,0,0,0.06);
+            --radius: 20px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; line-height: 1.5; }
 
-        #pinOverlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: #ffffff; z-index: 9999; display: flex;
-            flex-direction: column; align-items: center; justify-content: center;
-            padding: 24px; text-align: center;
-        }
-        .pin-card {
-            background: var(--bg); padding: 32px 24px; border-radius: var(--radius);
-            box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%; max-width: 340px;
-        }
-        .pin-icon { font-size: 3rem; margin-bottom: 12px; }
-        .pin-title { font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
-        .pin-subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; }
-        .pin-input {
-            width: 100%; padding: 14px; font-size: 1.5rem; letter-spacing: 8px; text-align: center;
-            border: 2px solid var(--border); border-radius: 12px; outline: none; transition: all 0.2s;
-            margin-bottom: 16px; background: #fff;
-        }
-        .pin-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46,125,50,0.15); }
-        .pin-btn {
-            width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none;
-            border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
-        }
-        .pin-btn:active { transform: scale(0.98); }
-        .pin-error { color: var(--secondary); font-size: 0.85rem; font-weight: 600; margin-top: 12px; display: none; }
-
         header {
-            position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95);
+            position: sticky; top: 0; z-index: 100; background: rgba(252, 250, 245, 0.95);
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border); padding: 12px 16px;
             display: flex; align-items: center; justify-content: space-between;
@@ -72,7 +46,7 @@
             white-space: nowrap; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border);
             cursor: pointer; transition: all 0.2s;
         }
-        .week-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .week-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(46,125,50,0.2); }
 
         .container { max-width: 768px; margin: 0 auto; padding: 16px; }
 
@@ -83,44 +57,94 @@
         }
         .toggle-btn.active { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 
+        /* ACCORDION CARDS */
         .card {
-            background: var(--card-bg); border-radius: var(--radius); padding: 20px;
+            background: var(--card-bg); border-radius: var(--radius); padding: 0;
             margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--border);
+            overflow: hidden; transition: all 0.3s ease;
         }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .day-badge { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--secondary); letter-spacing: 0.5px; }
-        .meal-title { font-size: 1.15rem; font-weight: 700; margin-top: 2px; color: #111; }
+        
+        .card-header {
+            padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            background: #fff; transition: background 0.2s;
+        }
+        .card-header:active { background: #f9f9f9; }
+        .card-header-left { flex-grow: 1; padding-right: 12px; }
+        
+        .card-body {
+            padding: 0 20px 20px 20px; border-top: 1px dashed var(--border); display: none;
+        }
+        .card-body.open { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin: 16px 0 8px 0; letter-spacing: 0.5px; }
-        .ingredients-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-        .ing-chip { background: var(--bg); padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; border: 1px solid #eee; }
+        /* Gekocht State */
+        .card.is-cooked { opacity: 0.65; box-shadow: none; border-color: #eee; }
+        .card.is-cooked .card-header { background: #f4f6f4; }
+        .card.is-cooked .meal-title { text-decoration: line-through; color: var(--text-muted); }
 
-        .step-item { display: flex; gap: 12px; margin-bottom: 10px; cursor: pointer; align-items: flex-start; }
-        .step-num { background: var(--primary-light); color: var(--primary); font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px; }
-        .step-text { font-size: 0.95rem; color: #333; flex-grow: 1; }
-        .step-item.completed .step-text { text-decoration: line-through; opacity: 0.5; }
-        .step-item.completed .step-num { background: #ccc; color: #fff; }
+        /* Badges */
+        .badge-container { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .badge {
+            font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 12px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .badge-veggie { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .badge-meat { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .badge-fish { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .badge-time { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
 
-        .kniff-box { background: #fff8e1; border-left: 4px solid var(--accent); padding: 12px; border-radius: 8px; font-size: 0.88rem; color: #5d4037; margin-top: 12px; }
-        .baby-box { background: #f3e5f5; border-left: 4px solid #ab47bc; padding: 12px; border-radius: 8px; font-size: 0.88rem; color: #4a148c; margin-top: 10px; display: none; }
+        .day-badge { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--secondary); letter-spacing: 0.5px; }
+        .meal-title { font-size: 1.15rem; font-weight: 800; margin-top: 4px; color: #111; line-height: 1.3; }
+
+        .section-title { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin: 20px 0 10px 0; letter-spacing: 0.5px; }
+        .ingredients-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .ing-chip { background: var(--bg); padding: 6px 12px; border-radius: 8px; font-size: 0.9rem; border: 1px solid var(--border); font-weight: 500; }
+
+        .step-item { display: flex; gap: 12px; margin-bottom: 12px; cursor: pointer; align-items: flex-start; }
+        .step-num { background: var(--primary-light); color: var(--primary); font-weight: 800; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; margin-top: 2px; }
+        .step-text { font-size: 0.95rem; color: #333; flex-grow: 1; line-height: 1.5; }
+        .step-item.completed .step-text { text-decoration: line-through; color: var(--text-muted); }
+        .step-item.completed .step-num { background: #e0e0e0; color: #888; }
+
+        .kniff-box { background: #fff8e1; border-left: 4px solid var(--accent); padding: 14px; border-radius: 12px; font-size: 0.9rem; color: #5d4037; margin-top: 16px; line-height: 1.5; }
+        .baby-box { background: #f3e5f5; border-left: 4px solid #ab47bc; padding: 14px; border-radius: 12px; font-size: 0.9rem; color: #4a148c; margin-top: 12px; display: none; line-height: 1.5; }
         .baby-box.visible { display: block; }
 
-        .check-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; cursor: pointer; }
-        .check-item input { width: 18px; height: 18px; accent-color: var(--primary); }
+        /* Gekocht Button */
+        .gekocht-btn {
+            width: 100%; padding: 16px; margin-top: 24px;
+            background: var(--primary); color: #fff; border: none; border-radius: 16px;
+            font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+        }
+        .gekocht-btn:active { transform: scale(0.97); box-shadow: 0 2px 6px rgba(46,125,50,0.2); }
+        .gekocht-btn.cooked { background: #b0bec5; box-shadow: none; color: #fff; }
+
+        /* Einkaufsliste etc */
+        .simple-card { padding: 20px; }
+        .check-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 1rem; cursor: pointer; }
+        .check-item input { width: 22px; height: 22px; accent-color: var(--primary); }
         .check-item.done { text-decoration: line-through; color: var(--text-muted); }
 
         .tab-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around; padding: 8px 0 16px 0; z-index: 100;
+            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; padding: 10px 0 20px 0; z-index: 100;
         }
         .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 0.75rem; text-decoration: none; cursor: pointer; border: none; background: none; flex: 1; }
-        .tab-item.active { color: var(--primary); font-weight: 700; }
-        .tab-icon { font-size: 1.25rem; }
+        .tab-item.active { color: var(--primary); font-weight: 800; }
+        .tab-icon { font-size: 1.4rem; }
 
-        textarea.json-editor { width: 100%; height: 320px; font-family: monospace; font-size: 0.85rem; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; }
-        .btn { padding: 10px 18px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 8px; }
-
-        .copy-btn { background: var(--secondary); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        /* Emoji Rain Animations */
+        .emoji-rain {
+            position: fixed; top: -50px; font-size: 2.5rem; z-index: 9999; pointer-events: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(var(--drift), 110vh) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -138,39 +162,37 @@
         </div>
 
         <div id="pantryView" style="display:none;">
-            <div class="card">
-                <div class="card-header">
+            <div class="card simple-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                     <div class="meal-title">🛒 Rewe Einkaufsliste</div>
-                    <button class="copy-btn" onclick="copyShoppingList()">📋 Kopieren</button>
+                    <button style="background: var(--secondary); color: #fff; border: none; padding: 8px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer;" onclick="copyShoppingList()">📋 Kopieren</button>
                 </div>
                 <div id="reweList"></div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <div class="meal-title">🥫 Smart Pantry (Vorrat)</div>
-                </div>
+            <div class="card simple-card">
+                <div class="meal-title" style="margin-bottom: 12px;">🥫 Smart Pantry (Vorrat)</div>
                 <div id="pantryList"></div>
             </div>
         </div>
 
         <div id="infoView" style="display:none;">
-            <div class="card">
+            <div class="card simple-card">
                 <div class="meal-title">ℹ️ Über die Kochbox</div>
                 <p style="font-size:0.95rem; color: var(--text-muted); margin: 8px 0 16px 0;">
                     Willkommen bei der Hello Home Kochbox! Diese App nimmt dir die Einkaufs- und Wochenplanung ab.
                 </p>
                 
-                <div class="section-title">Die Idee</div>
-                <p style="font-size:0.9rem; margin-bottom: 16px; color: var(--text);">
+                <div class="section-title" style="margin-top: 0;">Die Idee</div>
+                <p style="font-size:0.95rem; margin-bottom: 16px; color: var(--text); line-height: 1.5;">
                     <strong>Einmal einkaufen, clever kombinieren:</strong> Frische Zutaten werden so über die Woche verteilt, dass kaum Reste bleiben (Smart Pantry). Wir setzen auf einen Mix aus schnellen Alltagsgerichten und echten Highlights am Wochenende.
                 </p>
                 
                 <div class="section-title">Wie es funktioniert</div>
-                <ul style="font-size:0.9rem; padding-left: 20px; margin-bottom: 12px; color: var(--text);">
-                    <li style="margin-bottom: 8px;"><strong>Einkaufen:</strong> Du machst einen Haupteinkauf. Achte bei der Liste auf den Vermerk <em>(Zwischeneinkauf Tag 3/4)</em> bei frischem Fisch oder Geflügel.</li>
-                    <li style="margin-bottom: 8px;"><strong>Frische-Reihenfolge:</strong> Koche die Gerichte idealerweise in der Reihenfolge von Tag 1 bis 4. Leicht verderbliche Zutaten wie rohes Hack oder Fisch sind immer für den Wochenstart (Tag 1 & 2) eingeplant.</li>
-                    <li style="margin-bottom: 8px;"><strong>Gastro-Kniffe 💡:</strong> Kleine Zubereitungs-Tricks, die dein Essen wie im Restaurant schmecken lassen (z.B. Emulgieren, Röstaromen nutzen).</li>
-                    <li style="margin-bottom: 8px;"><strong>Familientisch 👶:</strong> Mit eingeschaltetem Baby-Modus siehst du bei jedem Rezept sofort, wie du ungesalzene oder ungewürzte Komponenten sicher abzweigen kannst.</li>
+                <ul style="font-size:0.95rem; padding-left: 20px; margin-bottom: 12px; color: var(--text); line-height: 1.5;">
+                    <li style="margin-bottom: 10px;"><strong>Einkaufen:</strong> Du machst einen Haupteinkauf. Achte bei der Liste auf den Vermerk <em>(Zwischeneinkauf Tag 3/4)</em> bei frischem Fisch oder Geflügel.</li>
+                    <li style="margin-bottom: 10px;"><strong>Frische-Reihenfolge:</strong> Koche die Gerichte idealerweise in der Reihenfolge von Tag 1 bis 4. Leicht verderbliche Zutaten wie rohes Hack oder Fisch sind immer für den Wochenstart (Tag 1 & 2) eingeplant.</li>
+                    <li style="margin-bottom: 10px;"><strong>Gastro-Kniffe 💡:</strong> Kleine Zubereitungs-Tricks, die dein Essen wie im Restaurant schmecken lassen (z.B. Emulgieren, Röstaromen nutzen).</li>
+                    <li style="margin-bottom: 10px;"><strong>Familientisch 👶:</strong> Mit eingeschaltetem Baby-Modus siehst du bei jedem Rezept sofort, wie du ungesalzene oder ungewürzte Komponenten sicher abzweigen kannst.</li>
                 </ul>
             </div>
         </div>
@@ -193,19 +215,8 @@
 
     <script>
         const initialData = [{"id": "nov_w1", "title": "Herbst-Mix (Kürbis, Pilze & Lauch)", "month": "November", "week": "Woche 1", "pantry": ["Basmatireis", "Rote Linsen", "Breite Nudeln", "Helle Sojasauce", "Gemüsebrühe-Paste"], "rewe": ["1x Hokkaido-Kürbis (groß)", "2x Stangen Porree / Lauch", "1x Packung braune Champignons (250g)", "1x Packung frische Gnocchi (Kühlregal, 500g)", "1x Packung Salsiccia oder Pancetta (150-200g)", "1x Becher Schmand (200g)", "1x Bio-Zitrone", "1x Halloumi (200g)"], "meals": [{"day": "Tag 1 (Schnell & Raffiniert)", "name": "Gnocchi mit Pilzen, Salsiccia-Nocken & Thymian-Nussbutter-Schmand", "ingredients": ["500g Frische Gnocchi", "150-200g Salsiccia", "1/2 Stange Lauch", "125g Champignons", "40g Butter", "Zweig frischer Thymian", "200g Schmand", "1 Bio-Zitrone"], "steps": ["Das Salsiccia-Brät in kleinen Nocken direkt aus der Haut in eine Pfanne drücken. Bei mittlerer bis hoher Hitze 4-5 Min. kross anbraten, aus der Pfanne nehmen und beiseitestellen.", "Den Lauch gründlich waschen und in feine Ringe schneiden. Die Champignons mit Küchenpapier säubern und vierteln.", "Die Butter im verbliebenen Würzfett bei mittlerer Hitze schmelzen lassen, bis sie leicht schäumt und nussig duftet. Die gezupften Thymianblätter dazugeben und kurz mit anrösten (Beurre Noisette). Gnocchi, Lauchringe und Pilze hinzugeben und 5-6 Min. goldbraun anbraten. Die Salsiccia-Nocken unterheben.", "Den Schmand in einer kleinen Schale mit 1 TL Bio-Zitronenabrieb und 1 TL Zitronensaft glattrühren.", "Die Schmand-Creme unter die heißen Gnocchi schwenken, mit frisch gemahlenem Pfeffer abschmecken und warm anrichten."], "kniff": "Beurre Noisette (Nussbutter): Das Karamellisieren der Milchfeststoffe verleiht eine tief-nussige Note. Die Zitronenschale schneidet ideal durch das Fett von Schmand und Wurst.", "baby": "Gnocchi fürs Baby separat in ungesalzenem Wasser weich kochen und leicht zerdrücken (nicht in der Pfanne mitbraten, da sie sonst zäh werden). Lauch und Pilze vor dem Salzen & Würzen sowie vor der gewürzten Salsiccia abzweigen."}, {"day": "Tag 2 (Schnell & Raffiniert)", "name": "Umami-Kürbis-Reis-Pfanne mit Sesam-Sojasauce-Emulsion", "ingredients": ["250g Basmatireis", "1/4 Hokkaido-Kürbis", "125g Champignons", "2 EL Helle Sojasauce", "Pflanzenöl"], "steps": ["Basmatireis nach Packungsanweisung in leicht gesalzenem Wasser gar kochen. Beim Abgießen 2-3 EL Reiswasser auffangen.", "Den Hokkaido-Kürbis entkernen und in 1 cm große Würfel schneiden. Die Champignons säubern und vierteln.", "Etwas Öl in einer großen Pfanne erhitzen. Kürbis- und Pilzwürfel bei hoher Hitze 5-7 Min. scharf anbraten, bis der Kürbis weich ist und Röstkanten zeigt.", "Den gekochten Reis in die Pfanne geben und 2 Min. unter Rühren kräftig mitrösten.", "Mit 2 EL Sojasauce und dem aufbewahrten Reiswasser ablöschen. Unter Schwenken 1 Min. einkochen lassen, bis der Reis glänzt."], "kniff": "Röststoffe & Maillard-Reaktion: Hohe Hitze karamellisiert den Kürbis. Stärkehaltiges Reiswasser bindet die Sojasauce zu einem glänzenden Glaze.", "baby": "Kürbis & Pilze ungewürzt weichbraten. Mit purem Reis servieren."}, {"day": "Tag 3 (Schnell & Deftig)", "name": "Tagliatelle mit Lauch-Fondue, Muskat & Pfeffer-Crunch", "ingredients": ["250g Breite Nudeln", "1/2 Stange Lauch", "100g Schmand", "Muskatnuss", "Bio-Zitrone", "Ganzes schwarzes Pfefferkorn"], "steps": ["Nudeln in einem großen Topf in reichlich kochendem Salzwasser aufsetzen.", "Den Lauch gründlich waschen und in hauchfeine Ringe schneiden. Genau 2 Min. vor Ende der Nudelkochzeit die Lauchringe direkt mit in das Nudelwasser geben.", "Nudeln und Lauch abgießen, dabei 1 Tasse (ca. 100 ml) Nudelwasser auffangen.", "Nudeln & Lauch zurück in den Topf geben. Schmand, 3-4 EL Nudelwasser, eine Prise Muskatnuss und etwas Zitronenabrieb einrühren, bis eine seidige Sauce entsteht.", "Ganzen schwarzen Pfeffer im Mörser oder unter einem schweren Pfannenboden grob zerkleinern und trocken in einer Pfanne 1-2 Min. anrösten. Die Nudeln auf Tellern anrichten und mit dem Pfeffer-Crunch bestreuen."], "kniff": "Emulgieren mit Pasta-Wasser: Stärkereiches Nudelwasser verbindet Fett und Wasser zu einer cremigen Sauce, die an der Pasta haftet.", "baby": "Nudeln und weichen Lauch ungesalzen vor Brühe/Würze abzweigen."}, {"day": "Tag 4 (Das Highlight)", "name": "Krosser Halloumi auf Balsamico-Linsen mit geschmolzenem Lauch", "ingredients": ["200g Halloumi", "1 Stange Lauch", "200g Rote Linsen", "Gemüsebrühe", "Balsamico-Essig", "Butter"], "steps": ["Die Linsen in 600 ml Gemüsebrühe ca. 15-20 Min. weichköcheln. Am Ende mit 1-2 EL Balsamico abschmecken.", "Den Lauch in Ringe schneiden und in einer separaten Pfanne mit etwas Butter 10 Min. sanft schmoren ('schmelzen').", "Den Halloumi in dicke Scheiben schneiden und in einer beschichteten Pfanne ohne Öl von beiden Seiten goldbraun und kross anbraten.", "Komponenten anrichten: Balsamico-Linsen als Basis auf tiefe Teller geben, den Lauch daneben platzieren und mit dem Halloumi toppen."], "kniff": "Plated Dish (Komponenten-Gericht): Der krosse, sehr salzige Halloumi profitiert extrem von der erdigen Säure der Balsamico-Linsen und der Süße des geschmolzenen Lauchs.", "baby": "Weiche Linsen und Lauch ungesalzen abgeben. Halloumi aussparen (zu salzig)."}]}, {"id": "nov_w2", "title": "Herbst-Mix (Spitzkohl, Möhren & Hack)", "month": "November", "week": "Woche 2", "pantry": ["Basmatireis", "Helle Sojasauce", "Breite Nudeln / Tagliatelle", "Tomatenmark", "Erdnussmus"], "rewe": ["1x Spitzkohl", "1x Bund Möhren", "1x Rinderhack (400g)", "1x Feta (200g)", "1x Bio-Zitrone", "1x Hähnchenbrust (Zwischeneinkauf Tag 3/4, 300g)"], "meals": [{"day": "Tag 1 (Schnell & Würzreich)", "name": "Spitzkohl-Hack-Pfanne mit Erdnuss-Sojasauce-Glaze & Zitronenzeste", "ingredients": ["Basmatireis", "1/2 Spitzkohl", "1/2 Bund Möhren", "200g Rinderhack", "2 EL Erdnussmus", "2 EL Sojasauce", "Bio-Zitrone"], "steps": ["Reis nach Packungsanleitung kochen. Spitzkohl vom Strunk befreien und in feine Streifen schneiden. Möhren schälen und feinst raspeln.", "Das Rinderhack flach in eine knallheiße Pfanne mit etwas Öl drücken und 3-4 Min. unberührt braten, bis braune Krusten entstehen, erst dann zerkleinern.", "Kohlstreifen und Möhrenraspel hinzufügen und bei mittlerer Hitze 5 Min. knackig-weich mitdünsten.", "In einer kleinen Tasse 2 EL Erdnussmus, 2 EL Sojasauce, 1 TL Zitronenabrieb und 2 EL heißes Reiswasser glattrühren.", "Das Glaze unter das Gemüse-Hack schwenken, mit Salz und Pfeffer abschmecken und auf dem Reis anrichten."], "kniff": "Maillard-Reaktion: Hackfleisch flach in die heiße Pfanne drücken und scharf anbraten für intensive Umami-Tiefe.", "baby": "Möhrenraspel und ungewürztes Hack mit Reis vor der Sauce & Zitrone abzweigen. Erdnussmus pur dazu reichen."}, {"day": "Tag 2 (Schnell & Deftig)", "name": "Tagliatelle-Ragu vom Spitzkohl mit karamellisiertem Tomatenmark & Feta-Schnee", "ingredients": ["Tagliatelle", "200g Rinderhack", "1/2 Spitzkohl", "2 EL Tomatenmark", "100g Feta"], "steps": ["Tagliatelle in kochendem Salzwasser al dente kochen.", "Das restliche Rinderhack in einer Pfanne kräftig anbraten, den restlichen geschnittenen Spitzkohl unterrühren und 3 Min. mitbraten.", "Das Fleisch und Gemüse an den Pfannenrand schieben. In der freien Pfannenmitte 2 EL Tomatenmark 1-2 Min. scharf rösten, bis es tiefrot duftet.", "Mit einer großen Kelle Nudelwasser ablöschen und alles zu einer sämigen Ragu-Sauce vermengen.", "Die abgetropften Nudeln untermischen. Auf den Tellern anrichten und den Feta sehr fein darüber reiben ('Feta-Schnee')."], "kniff": "Karamellisieren & Feta-Schnee: Tomatenmark verliert Säure und wird süß-fruchtig beim Mitrösten. Geriebener Feta schmilzt sanft.", "baby": "Nudeln und ungewürztes Kohl-Hack-Gemisch abzweigen (ohne salzigen Feta)."}, {"day": "Tag 3 (Schnell & Leicht)", "name": "Seidige Möhren-Erbs-Velouté auf Reis oder Tagliatelle", "ingredients": ["Restliche Möhren", "Gemüsebrühe", "1 TL Erdnussmus", "Zitronensaft"], "steps": ["Die verbliebenen Möhren schälen, feinst raspeln und in einer kleinen Pfanne mit etwas Öl 2 Min. andünsten.", "Mit 150 ml Gemüsebrühe und 1 TL Erdnussmus auffüllen und 5 Min. leicht köcheln lassen.", "Mit einem Pürierstab oder Schneebesen samtig aufschlagen/pürieren.", "Die Sauce über verbliebenen Reis oder Nudeln geben und mit etwas frischem Zitronensaft abschmecken."], "kniff": "Pflanzliche Bindung: Erdnussmus wirkt durch Fett und Eiweiß als natürlicher Emulgator für eine samtige Velouté.", "baby": "Ungesalzener Möhrenbrei mit einem Tropfen Pflanzenöl ist ideal fürs Baby."}, {"day": "Tag 4 (Das Highlight)", "name": "Röstaromatische Ofen-Möhren auf samtiger Feta-Creme mit Hähnchenbrust", "ingredients": ["Möhren", "100g Feta", "Hähnchenbrust (Zwischeneinkauf)", "Milch oder Wasser", "Olivenöl"], "steps": ["Backofen auf 220°C Ober-/Unterhitze vorheizen. Möhren schälen, der Länge nach halbieren und auf einem Backblech mit Öl 20 Min. rösten.", "Den restlichen Feta mit 2 EL warmem Wasser/Milch im Mixer zu einer samtigen, glatten Creme pürieren.", "Die Hähnchenbrust in einer Pfanne kross anbraten und durchgaren. Danach in Tranchen (Scheiben) schneiden.", "Anrichten: Die kühle Feta-Creme als Spiegel auf flachen Tellern verstreichen, die heißen Ofen-Möhren und Hähnchen-Tranchen getrennt darauflegen."], "kniff": "Plated Dish: Die kühle Feta-Creme bildet den perfekten Kontrast zu heißem Ofengemüse und frisch gebratenem Geflügel.", "baby": "Weich gebackene Ofenmöhren und durchgegartes Hähnchen als Fingerfood geben. Feta-Creme aussparen."}]}, {"id": "nov_w3", "title": "Herbst-Mix (Lachs, Süßkartoffel, Rote Bete & Spinat)", "month": "November", "week": "Woche 3", "pantry": ["Rote Linsen", "Breite Nudeln / Tagliatelle", "Balsamico-Essig", "Walnüsse", "Gemüsebrühe-Paste"], "rewe": ["2x frisches Lachsfilet mit Haut (250-300g)", "2x große Süßkartoffeln", "1x Beutel Babyspinat (125g)", "1x Rote Bete vorgekocht (500g)", "1x Becher Ricotta (250g)", "1x Bio-Zitrone"], "meals": [{"day": "Tag 1 (Schnell & Feierabend-Gourmet)", "name": "Knuspriges Lachsfilet auf Zitronen-Ricotta-Tagliatelle & Babyspinat", "ingredients": ["Tagliatelle", "2 Lachsfilets", "60g Babyspinat", "125g Ricotta", "Bio-Zitrone"], "steps": ["Tagliatelle in Salzwasser kochen.", "Lachs auf der Hautseite leicht salzen. In einer Pfanne mit Öl auf der Hautseite 3-4 Min. kross anbraten, dann Herd ausschalten, Fisch wenden und 2 Min. durchziehen lassen.", "Den frischen Spinat, Ricotta und 1 TL Zitronenabrieb mit 3 EL Nudelwasser unter die heißen Nudeln rühren.", "Die cremigen Nudeln auf Tellern anrichten und das Lachsfilet darauf platzieren."], "kniff": "Fisch auf der Haut braten: Die Fettschicht schützt das Fleisch. Ricotta und Zitronenabrieb verschmelzen zu samtiger Emulsion.", "baby": "Lachsstück abzweigen, gründlich nach Gräten prüfen und zerteilen. Mit ungesalzenen Nudeln und Spinat servieren."}, {"day": "Tag 2 (Schnell & Samtig)", "name": "Süßkartoffel-Linsen-Dal mit Kokos-Frische-Kick", "ingredients": ["1 Süßkartoffel", "200g Rote Linsen", "Gemüsebrühe", "Restlicher Spinat", "Zitronensaft"], "steps": ["Süßkartoffel schälen, würfeln und in einem Topf mit etwas Öl 3 Min. scharf anbraten.", "Linsen dazugeben, mit 500 ml Gemüsebrühe auffüllen und 15 Min. bei mittlerer Hitze weichköcheln.", "Den restlichen Babyspinat unterheben, bis er zusammenfällt, und mit frischem Zitronensaft abschmecken."], "kniff": "Anrösten & Säurebalancierung: Süßkartoffeln vorher anbraten setzt Fruchtzucker frei. Zitronensaft durchbricht die Schwere.", "baby": "Süßkartoffel und Linsen pur vor dem Brühe-Salzen abzweigen (in Wasser weichkochen)."}, {"day": "Tag 3 (Schnell & Deftig)", "name": "Warmes Rote-Bete-Bistro-Gemüse auf Ricotta-Spiegel mit Walnuss-Pangrattato", "ingredients": ["250g Rote Bete", "1 EL Balsamico", "Restlicher Ricotta", "Walnüsse"], "steps": ["Vorgekochte Rote Bete in Spalten schneiden, in einer Pfanne mit etwas Öl erwärmen und mit 1 EL Balsamico ablöschen.", "Den restlichen Ricotta auf flachen Tellern cremig als Spiegel verstreichen.", "Die gehackten Walnüsse in einer kleinen Pfanne ohne Fett 2 Min. trocken anrösten.", "Die warme Bete auf dem Ricotta-Spiegel anrichten und mit den Röst-Walnüssen bestreuen."], "kniff": "Fruchtsäure-Spiel & Pangrattato: Balsamico bringt Fruchtsäure zur Bete, Walnüsse sorgen für nussigen Crunch.", "baby": "Weiche Rote Bete ungesalzen abzweigen. Ricotta dazu reichen (Walnüsse fürs Baby aussparen)."}, {"day": "Tag 4 (Das Highlight)", "name": "Gefüllte Kumpir-Süßkartoffel mit Rote-Bete-Mousse & karamellisierten Walnüssen", "ingredients": ["1 große Süßkartoffel", "250g Rote Bete", "Ricotta", "Walnüsse", "Honig", "Balsamico"], "steps": ["Süßkartoffel mehrmals mit der Gabel einstechen und im Ofen bei 200°C ca. 45 Min. weich garen.", "Rote Bete mit Ricotta und einer Prise Salz im Mixer zu einer feinen pinken Mousse pürieren.", "Walnüsse in einer Pfanne anrösten, mit 1 TL Honig und 1 TL Balsamico glatt karamellisieren.", "Die heiße Süßkartoffel längs aufschneiden, das Innere leicht auflockern, mit Mousse füllen und Walnüssen toppen."], "kniff": "Kumpir & Karamell-Kontrast: Weiches Inneres trifft auf süß-sauer karamellisierte Knusper-Walnüsse.", "baby": "Weiches Süßkartoffelfleisch löffeln (mit etwas Rapsöl verfeinert)."}]}, {"id": "dez_w1", "title": "Winter-Mix (Rotkohl, Kartoffeln & Bratwurst)", "month": "Dezember", "week": "Woche 1", "pantry": ["Preiselbeeren (Glas)", "Senf", "Balsamico-Essig", "Gemüsebrühe-Paste", "Rote Linsen"], "rewe": ["1x Rotkohl (klein)", "1kg Festkochende Kartoffeln", "2x Äpfel", "1x Packung Bratwurst (oder Veggie)", "1x Becher Schlagsahne"], "meals": [{"day": "Tag 1 (Schnell & Wärmend)", "name": "Blitz-Rotkohl-Pfanne mit Apfel & Linsen", "ingredients": ["1/2 Rotkohl", "1 Apfel", "150g Rote Linsen", "Gemüsebrühe", "Balsamico", "Preiselbeeren"], "steps": ["Rotkohl in feine Streifen hobeln, Apfel schälen und würfeln.", "Beides in einem Topf mit etwas Öl 3 Min. anbraten, Linsen und 400 ml Brühe zugeben.", "Bei mittlerer Hitze 15 Min. weichköcheln.", "Mit 1 EL Balsamico und 1 EL Preiselbeeren süß-sauer abschmecken."], "kniff": "Rotkohl-Säure-Balance: Rotkohl braucht Säure und Süße für leuchtende Farbe und Balancierung der Bitternote.", "baby": "Große Portion weiche Linsen und Apfelstücke vor dem Salzen/Würzen abzweigen."}, {"day": "Tag 2 (Schnell & Deftig)", "name": "Deftiges Kartoffel-Wurst-Gulasch mit Senf-Aroma", "ingredients": ["500g Kartoffeln", "2 Bratwürste", "1 EL Senf", "Gemüsebrühe"], "steps": ["Kartoffeln schälen und in mundgerechte Würfel schneiden, in Öl anbraten.", "Die Bratwürste in Scheiben schneiden und mit in die Pfanne geben.", "1 EL Senf einrühren, mit 300 ml Brühe auffüllen und 15-20 Min. köcheln lassen, bis die Kartoffelstärke die Sauce natürlich andickt."], "kniff": "Natürliche Stärkebindung: Ausgetretene Kartoffelstärke bindet die Brühe ohne Mehlschwitze.", "baby": "Kartoffeln separat in ungesalzenem Wasser kochen. Salziges Wurstgulasch meiden."}, {"day": "Tag 3 (Das Highlight)", "name": "Gebratene Wurst auf Kartoffelpüree mit glasiertem Balsamico-Rotkohl", "ingredients": ["500g Kartoffeln", "Sahne", "Butter", "Muskat", "Restlicher Rotkohl", "1 Apfel", "Balsamico", "Preiselbeeren", "Bratwürste"], "steps": ["Kartoffeln kochen, abgießen und abdampfen lassen. Mit 50 ml warmer Sahne, 20g Butter und Muskat fein stampfen.", "Restlichen Rotkohl und geriebenen Apfel dünsten, mit 1 EL Balsamico und Preiselbeeren glasieren.", "Bratwürste in einer Pfanne rundherum goldbraun braten und auf dem Püree mit Rotkohl anrichten."], "kniff": "Püree-Kunde: Das Abdampfen verhindert wässriges Püree. Sahne/Butter warm zugeben.", "baby": "Ungesalzenes Kartoffelpüree mit Sahne und gedünstetem Apfel (ohne Balsamico) reichlich geben."}]}, {"id": "dez_w2", "title": "Winter-Mix (Maronen, Hähnchen & Spätzle)", "month": "Dezember", "week": "Woche 2", "pantry": ["Basmatireis", "Honig", "Senf", "Gemüsebrühe-Paste"], "rewe": ["1x Frische Spätzle (500g)", "1x Maronen vorgekocht (200g)", "1x Hähnchenbrustfilet (400g)", "1x Crème fraîche (200g)", "1x Grana Padano (200g)", "2x Birnen"], "meals": [{"day": "Tag 1 (Mittags schnell)", "name": "Cremige Maronen-Spätzle-Pfanne mit Birne", "ingredients": ["100g Maronen", "1 Birne", "500g Spätzle", "100g Crème fraîche", "Grana Padano"], "steps": ["Maronen grob hacken, Birne entkernen und in Spalten schneiden. Beides in einer Pfanne mit etwas Butter 3 Min. anbraten.", "Die Spätzle hinzugeben und 5 Min. goldbraun mitbraten.", "Crème fraîche unterrühren, mit Pfeffer abschmecken und feingeriebenen Grana Padano darüberstreuen."], "kniff": "Süß-Herbe Röstaromen: Karamellisierte Birnen und Maronen treffen auf den Umami-Gegenpol Grana Padano.", "baby": "Spätzle fürs Baby separat in Wasser kochen (damit sie weich bleiben). Weiche Birnenspalten und zerdrückte Maronen dazugeben."}, {"day": "Tag 2 (Mittags schnell)", "name": "Blitz-Geschnetzeltes in Senf-Rahm mit Reis", "ingredients": ["Basmatireis", "200g Hähnchenbrust", "100g Crème fraîche", "1 EL Senf", "Gemüsebrühe"], "steps": ["Reis kochen.", "Hähnchenbrust in Streifen schneiden und bei hoher Hitze 3-4 Min. scharf anbraten.", "Mit 100g Crème fraîche, 1 EL Senf und 100 ml Brühe ablöschen und 5 Min. cremig einkochen lassen."], "kniff": "Senf als Emulgator: Verbindet Fett und Flüssigkeit zu einer seidenen Rahmsauce.", "baby": "Hähnchenstreifen ungesalzen anbraten und mit Reis weich kochen. Senf-Rahm meiden."}, {"day": "Tag 3 (Das Highlight)", "name": "Festlich glasierte Honig-Hähnchenbrust auf Maronen-Reis", "ingredients": ["Reis", "100g Maronen", "1 Birne", "Grana Padano", "200g Hähnchenbrust", "2 EL Honig"], "steps": ["Reis kochen und die gehackten Maronen unter den heißen Reis heben.", "Birnenscheiben in einer trockenen Pfanne rösten und den Hartkäse darauf schmelzen lassen.", "Hähnchenbrust anbraten, kurz vor Ende mit 2 EL Honig beträufeln und 1 Min. glasieren.", "Maronen-Reis anrichten, Hähnchen darauflegen und mit den Käse-Birnen garnieren."], "kniff": "Glasieren & Fruit-Cheese-Pairing: Honig hält das Fleisch saftig, Birne + Hartkäse ist ein Bistro-Clou.", "baby": "Puren Reis und durchgegartes Hähnchen vor dem Honig-Schritt abzweigen (Babys dürfen keinen Honig!)."}]}, {"id": "jan_w1", "title": "Wirsing & Umami-Küche", "month": "Januar", "week": "Woche 1", "pantry": ["Basmatireis", "Gnocchi", "Helle Sojasauce", "Orangen"], "rewe": ["1x Wirsing (klein)", "1x Natur-Tofu oder Rinderhack (400g)", "1x Pastinaken (500g)", "1x Chicorée", "1x Skrei / Kabeljau (Zwischeneinkauf Tag 3/4, 300g)", "1x Kräuterseitlinge (200g)", "1x Schmand / Feta"], "meals": [{"day": "Tag 1 (Schnell & Umami)", "name": "Wirsing-Ramen-Pfanne mit Teriyaki-Glaze & Crispy Tofu / Hack", "ingredients": ["Basmatireis", "Wirsing", "200g Tofu/Hack", "2 EL Sojasauce"], "steps": ["Reis kochen. Wirsing in feine Streifen schneiden.", "Tofu würfeln (oder Hack) und zusammen mit den Wirsingstreifen bei hoher Hitze scharf anbraten.", "Mit 2 EL Sojasauce und 2 EL Reiswasser deglasieren und 2 Min. einkochen."], "kniff": "Pan-Deglasieren: Das Lösen des Pfannenansatzes mit Stärkewasser bildet ein tiefes Glaze.", "baby": "Gedünstete Wirsingstreifen und Reis ungesalzen vor der Teriyaki-Sauce abzweigen."}, {"day": "Tag 2 (Schnell & Nussig)", "name": "Pastinaken-Gnocchi in nussiger Beurre Noisette & Salbei", "ingredients": ["Pastinaken", "Gnocchi", "Butter", "Salbei"], "steps": ["Pastinaken schälen, würfeln und in Wasser 10 Min. weichkochen. Gnocchi dazugeben.", "In einer Pfanne Butter erhitzen, bis sie braun nussig duftet.", "Gnocchi, Pastinaken und gezupften Salbei in der Beurre Noisette kross anbraten."], "kniff": "Beurre Noisette: Karamellisierte Milchfeststoffe harmonieren mit süßer Pastinake.", "baby": "Gnocchi fürs Baby separat in ungesalzenem Wasser weich kochen. Mit gekochten Pastinaken servieren."}, {"day": "Tag 3 (Schnell & Fruchtig-Herzhaft)", "name": "Gebratener Chicorée mit Orangen-Glaze & Feta-Schnee", "ingredients": ["Chicorée", "Orangensaft", "Honig", "Feta"], "steps": ["Chicorée halbieren und auf der Schnittfläche in Öl 3 Min. scharf anbraten.", "Mit Orangensaft und 1 TL Honig ablöschen und 5 Min. sanft dünsten.", "Auf Tellern anrichten und mit feingeriebenem Feta-Schnee bestreuen."], "kniff": "Bitterstoff-Balancierung: Anbraten mildert Bitterkeit, Fruchtsäure bringt Balance.", "baby": "Mildes Herzstück des gedünsteten Chicorée ungewürzt mit Reis reichen."}, {"day": "Tag 4 (Das Highlight)", "name": "Skrei auf Seiden-Pastinaken-Creme & Kräuterseitlingen", "ingredients": ["Pastinaken", "Butter", "Kräuterseitlinge", "Skrei / Kabeljau"], "steps": ["Pastinaken kochen und mit kalter Butter spiegelglatt pürieren.", "Pilze in Scheiben schneiden und trocken anbraten.", "Fisch auf der Hautseite kross anbraten, wenden und durchziehen lassen.", "Creme auf Tellern verstreichen, Fisch und Pilze darauf toppen."], "kniff": "Monter au Beurre: Kalte Butter im heißen Püree emulgiert zu seidener Textur.", "baby": "Skrei sanft dünsten, auf Gräten prüfen und mit ungesalzener Pastinaken-Creme servieren."}]}, {"id": "jan_w2", "title": "Die Rosenkohl-Revolution", "month": "Januar", "week": "Woche 2", "pantry": ["Tagliatelle", "Balsamico-Essig", "Rote Linsen", "Brot"], "rewe": ["1x Netz Rosenkohl (500g)", "1x Bacon (150g)", "1x Beutel Grünkohl (200g)", "1x Pecorino (150g)", "1x Champignons (250g)", "1x Schmand (200g)"], "meals": [{"day": "Tag 1 (Schnell & Karamellig)", "name": "Halbierter Ofen-Rosenkohl mit Ahornsirup, Balsamico & Bacon-Crunch", "ingredients": ["Rosenkohl", "Bacon", "Ahornsirup", "Balsamico"], "steps": ["Rosenkohl halbieren, Bacon knusprig ausbraten und beiseitestellen.", "Rosenkohl auf der Schnittfläche in der Pfanne tiefbraun anbraten.", "Mit 1 EL Ahornsirup und 1 EL Balsamico ablöschen, mit Bacon-Crunch bestreuen."], "kniff": "Dry Roasting: Schnittflächen-Braten setzt Zucker frei und mildert Bitterstoffe.", "baby": "Weich gebackene Rosenkohlhälften ungewürzt als Fingerfood (ohne Bacon)."}, {"day": "Tag 2 (Schnell & Seidig)", "name": "Grünkohl-Cacio-e-Pepe auf Tagliatelle", "ingredients": ["Tagliatelle", "Grünkohl", "Pecorino", "Schwarzer Pfeffer"], "steps": ["Tagliatelle kochen, Grünkohl 2 Min. vor Ende mitblanchieren.", "Pastawasser auffangen.", "Nudeln, Grünkohl, Pastawasser und Pecorino cremig verrühren."], "kniff": "Cacio e Pepe Emulsion: Stärke bindet den Käse ohne Sahne.", "baby": "Nudeln und Grünkohl vor Pfeffer und salzigem Pecorino entnehmen."}, {"day": "Tag 3 (Schnell & Pilz-Bistro)", "name": "Bistro-Pilz-Toast mit Thymian-Pan-Sauce & Schmand-Spiegel", "ingredients": ["Champignons", "Butter", "Thymian", "Brot", "Schmand"], "steps": ["Champignons vierteln und in trockener Pfanne braun anbraten.", "Butter, Thymian und 2 EL Brühe zugeben und montieren.", "Brot rösten, Schmand aufstreichen und Pilze darauf verteilen."], "kniff": "Pilze trocken anrösten: Verhindert Wasserverlust für saftigen Biss.", "baby": "Weiche Pilzstücke auf ungetoastetem Brot mit Schmand reichen."}, {"day": "Tag 4 (Das Highlight)", "name": "Geschmorter Wirsing-Wickel mit Linsen-Pilz-Füllung", "ingredients": ["Wirsingblätter", "Rote Linsen", "Champignons", "Balsamico", "Honig"], "steps": ["Wirsingblätter 3 Min. blanchieren.", "Linsen und gehackte Pilze kochen, in die Blätter wickeln.", "Balsamico mit Brühe und Honig sirupartig einkochen.", "Wickel anbraten und auf dem Balsamico-Spiegel servieren."], "kniff": "Balsamico-Reduktion: Einkochen konzentriert Fruchtsäure und Süße.", "baby": "Weiches Linsen-Pilz-Gemisch und gedämpfte Wirsingblätter anbieten."}]}, {"id": "jan_w3", "title": "Winter-Frische & Omega-3", "month": "Januar", "week": "Woche 3", "pantry": ["Basmatireis", "Breite Nudeln", "Walnüsse", "Orangen/Zitrone"], "rewe": ["2x frisches Lachsfilet (300g)", "1x Beutel Grünkohl (200g)", "1x Fenchel", "1x Pastinaken (300g)", "1x Hähnchenbrust (Zwischeneinkauf Tag 3/4, 400g)", "1x Schmand"], "meals": [{"day": "Tag 1 (Schnell & Omega-3)", "name": "Krosses Lachsfilet auf Zitronen-Grünkohl-Wok & Duftreis", "ingredients": ["Basmatireis", "Lachsfilet", "Grünkohl", "Zitronenabrieb"], "steps": ["Reis kochen. Lachs auf Hautseite kross anbraten.", "Grünkohl mit Zitronensaft kurz anschwitzen.", "Anrichten."], "kniff": "Haut-Braten: Schützt zartes Fleisch, Säure durchbricht Kohlschwere.", "baby": "Lachs auf Gräten prüfen, mit Reis und Grünkohl servieren."}, {"day": "Tag 2 (Schnell & Warm)", "name": "Warmes Fenchel-Pastinaken-Gemüse mit Orangen-Dressing & Walnüssen", "ingredients": ["Fenchel", "Pastinaken", "Orangensaft", "Honig", "Walnüsse"], "steps": ["Fenchel und Pastinaken feinhobeln, 4 Min. anbraten.", "Mit Orangensaft und Honig ablöschen.", "Walnüsse trocken rösten und toppen."], "kniff": "Ätherische Öle balancieren: Anisnote wird durch Hitze und Orangensaft süßlich.", "baby": "Weiches Gemüse ungesalzen abzweigen (ohne Nüsse)."}, {"day": "Tag 3 (Schnell & Samtig)", "name": "Seidige Fenchel-Velouté auf Pasta", "ingredients": ["Breite Nudeln", "Fenchel", "Pastinake", "Brühe", "Zitronensaft"], "steps": ["Nudeln kochen, Gemüse raspeln und dünsten.", "Mit Brühe köcheln und pürieren.", "Über Nudeln geben."], "kniff": "Natürliche Pektinbindung: Wurzelgemüse bildet samtige Sauce ohne Mehlschwitze.", "baby": "Ungesalzener Gemüsebrei mit Nudeln fürs Baby."}, {"day": "Tag 4 (Das Highlight)", "name": "Bistro-Hähnchenbrust in Dijon-Senf-Pan-Sauce auf Pastinaken-Stampf", "ingredients": ["Pastinaken", "Butter", "Hähnchenbrust", "Dijon-Senf", "Schmand"], "steps": ["Pastinaken kochen und zu Stampf verarbeiten.", "Hähnchen anbraten.", "Bratensatz mit Brühe, Senf und Schmand einkochen.", "Anrichten."], "kniff": "Nappingieren mit Pan-Sauce: Senf bindet Fett und Fond.", "baby": "Hähnchen und Stampf ohne Senfsauce reichen."}]}, {"id": "jan_w4", "title": "Textur-Kontraste & Winter-Gourmet", "month": "Januar", "week": "Woche 4", "pantry": ["Arborio-Reis", "Tahini", "Rote Linsen", "Tagliatelle", "Walnüsse"], "rewe": ["1/2 Wirsing", "2 Süßkartoffeln", "1 Dose Kichererbsen", "2 Hähnchenbrustfilets", "Karotten & Pastinaken", "Champignons & Kräuterseitlinge", "Kokosmilch"], "meals": [{"day": "Montag", "name": "Cremiges Wirsing-Risotto mit Walnüssen", "ingredients": ["Arborio-Reis", "Wirsing", "Gemüsebrühe", "Parmesan", "Walnüsse"], "steps": ["Schalotte & Reis in Öl anschwitzen, heiße Brühe nach und nach schöpflöffelweise unter Rühren zugeben.", "Wirsingstreifen unterheben, mit geriebenem Parmesan & Muskat cremig vollenden.", "Geröstete Walnüsse drüberstreuen."], "kniff": "Stärkeleaching erzeugt cremiges Risotto ohne Sahne.", "baby": "Risotto-Reis und Wirsing vor Parmesan, Wein und Salz abzweigen und weich dünsten. Walnüsse strikt aussparen."}, {"day": "Dienstag", "name": "Gebackene Süßkartoffel mit Kichererbsen & Tahin", "ingredients": ["Süßkartoffeln", "Kichererbsen", "Kreuzkümmel", "Tahin", "Zitrone"], "steps": ["Süßkartoffeln halbieren, Kichererbsen würzen und im Ofen bei 200°C 30 Min. rösten.", "Tahin-Dressing mit Zitronensaft verrühren und drübergeben."], "kniff": "Roasting karamellisiert Süßkartoffeln von außen.", "baby": "Ungewürzte, weiche Süßkartoffel löffeln. Kichererbsen schälen und fein zerdrücken."}, {"day": "Mittwoch", "name": "Hähnchenbrust in Dijonsenf-Sauce mit Wurzelgemüse", "ingredients": ["Hähnchenbrust", "Karotten", "Pastinaken", "Dijonsenf", "Sahne"], "steps": ["Gemüse in Stifte schneiden und blanchieren. Hähnchenbrust braten.", "Pan-Sauce mit Bratensatz, Senf & Sahne sämig einkochen."], "kniff": "Senf emulgiert den Bratensaft mit Sahne.", "baby": "Ungewürztes Hähnchen und blanchierte Karotten-/Pastinakenstifte vor der Senf-Rahm-Sauce entnehmen."}, {"day": "Donnerstag", "name": "Würzige Linsen-Kokos-Suppe", "ingredients": ["Rote Linsen", "Kokosmilch", "Ingwer", "Kurkuma", "Limette"], "steps": ["Ingwer anbraten, Linsen, Kokosmilch und Brühe 15 Min. weichköcheln.", "Mit frischem Limettensaft abschmecken."], "kniff": "Kurkuma & Kokosfett verbinden sich zu warmer Schärfe.", "baby": "Weich gekochte rote Linsen vor Ingwer, Limette und Salz abzweigen."}, {"day": "Freitag", "name": "Tagliatelle mit Kräuterseitlingen & brauner Salbeibutter", "ingredients": ["Tagliatelle", "Kräuterseitlinge", "Butter", "Salbei"], "steps": ["Tagliatelle kochen.", "Butter braun schäumen, Salbeiblätter und Pilze braun braten, mit Nudeln schwenken."], "kniff": "Salbeibutter erzeugt tiefes Bistro-Aroma.", "baby": "Nudeln und gedünstete Pilze ungesalzen vor der Salbeibutter abzweigen."}]}, {"id": "feb_w1", "title": "Februar-Mix (Karotten, Blumenkohl & Hack) - Familientopf Edition", "month": "Februar", "week": "Woche 1", "pantry": ["Basmatireis", "Penne", "Erdnussmus", "Sojasauce", "Balsamico", "Walnüsse"], "rewe": ["1x Bund Bunte Möhren", "1x Blumenkohl", "1x Gelbe Bete", "2x Süßkartoffeln", "1x Rinderhack (400g)", "1x Ricotta", "1x Grana Padano"], "meals": [{"day": "Tag 1 (Schnell)", "name": "Karamellisierte Bunte-Möhren-Stifte & Hack-Nocken auf Erdnuss-Glaze", "ingredients": ["Möhrenstifte (5cm)", "Hackfleisch", "Erdnussmus", "Sojasauce", "Reis"], "steps": ["Hack in kleine Nocken formen und anbraten, fingerdicke Möhrenstifte mitdünsten.", "Erdnuss-Sojasauce-Glaze unterrühren."], "kniff": "Maillard & Glaze: Fingerdicke Möhrenstifte sind perfekt für kleine Hände.", "baby": "Familientisch: Möhrenstifte & Hacknocken greifen. Erwachsene pimpen am Tisch mit Harissa & Maldon-Salz."}, {"day": "Tag 2 (Schnell)", "name": "Penne mit seidenem Blumenkohl-Parmesan-Fondue", "ingredients": ["Penne", "Blumenkohl", "Butter", "Grana Padano"], "steps": ["Blumenkohl weichkochen & pürieren, mit Butter & Nudelwasser emulgieren.", "Penne untermischen."], "kniff": "Pflanzliches Fondue: Blumenkohl bildet samtige Sauce ohne Sahne.", "baby": "Familientisch: Penne greifen/löffeln. Erwachsene pimpen mit Pfeffer & extra Parmesan."}, {"day": "Tag 3 (Schnell)", "name": "Gelbe Bete & Orangen-Glaze auf Tagliatelle", "ingredients": ["Tagliatelle", "Gelbe Bete", "Orangensaft", "Ricotta"], "steps": ["Gelbe Bete würfeln, anbraten, mit Orangensaft ablöschen.", "Mit Tagliatelle & Ricotta servieren."], "kniff": "Fruchtsäure-Deglasieren: Orangensaft bricht erdiges Aroma auf.", "baby": "Familientisch: Weiche Bete-Würfel & Nudeln. Erwachsene toppen mit Walnuss-Pangrattato."}, {"day": "Tag 4 (Das Highlight)", "name": "Zweierlei Ofen-Kumpir (Süßkartoffel-Sticks) mit Rote-Bete-Mousse", "ingredients": ["Süßkartoffel-Sticks", "Rote Bete", "Ricotta"], "steps": ["Süßkartoffel-Sticks im Ofen 20 Min. backen.", "Bete & Ricotta zu Mousse aufschlagen."], "kniff": "Fingerfood-Kumpir: Außen knusprig, innen cremig.", "baby": "Familientisch: Süßkartoffel-Sticks zum Selbsteintunken. Erwachsene ergänzen Ziegenkäse & Walnüsse."}]}, {"id": "feb_w2", "title": "Februar-Mix (Brokkoli, Kabeljau & Karotten) - Familientopf Edition", "month": "Februar", "week": "Woche 2", "pantry": ["Basmatireis", "Rigatoni", "Kürbiskerne"], "rewe": ["1x Kabeljau (300g)", "1x Lachs (Zwischeneinkauf Tag 3/4, 300g)", "1x Brokkoli", "1x Bund Möhren", "Rote Zwiebeln & Lauch", "1x Ricotta", "1x Bio-Zitrone"], "meals": [{"day": "Tag 1 (Schnell)", "name": "Zartes Kabeljaufilet auf Brokkoli-Röschen & Zitronen-Butter-Gnocchi", "ingredients": ["Kabeljau", "Brokkoli", "Gnocchi", "Butter", "Zitrone"], "steps": ["Brokkoli-Röschen dünsten, Gnocchi fürs Baby separat kochen.", "Fisch sanft braten, mit Zitronen-Butter-Sauce emulgieren."], "kniff": "Sanftes Fischgaren: Kalte Butter bindet Zitronensaft zu Sauce.", "baby": "Familientisch: Kabeljau zerfällt saftig, Brokkoli leicht zu greifen. Erwachsene toppen mit brauner Butter-Kapern."}, {"day": "Tag 2 (Schnell)", "name": "Rigatoni mit geschmorter Roter Zwiebel & Lauch-Fondue", "ingredients": ["Rigatoni", "Rote Zwiebeln", "Lauch", "Butter"], "steps": ["Zwiebeln & Lauch 10 Min. sanft schmoren ('schmelzen').", "Mit gekochten Rigatoni mischen."], "kniff": "Slow Melting bringt natürliche Zwiebelsüße hervor.", "baby": "Familientisch: Rigatoni fangen Fondue auf. Erwachsene toppen mit Chili & Schinken."}, {"day": "Tag 3 (Schnell)", "name": "Samtiges Karotten-Ingwer-Velouté mit Knusper-Topping", "ingredients": ["Möhren", "Prise Ingwer", "Butter", "Reis"], "steps": ["Möhren kochen, pürieren & mit Butter aufschlagen.", "Mit Reis servieren."], "kniff": "Pektinbindung: Karotten binden Suppe ohne Mehl.", "baby": "Familientisch: Mildes leuchtendes Püree. Erwachsene toppen mit Kürbiskernen & Kernöl."}, {"day": "Tag 4 (Das Highlight)", "name": "Gebratener Lachs auf Ofen-Stiftgemüse & Kräuter-Ricotta", "ingredients": ["Möhren & Pastinakenstifte", "Lachsfilet", "Ricotta"], "steps": ["Stiftgemüse 20 Min. im Ofen karamellisieren.", "Lachs kross anbraten, auf Ricotta-Spiegel anrichten."], "kniff": "Haut-Braten & Röstgemüse: Außen süß, innen cremig.", "baby": "Familientisch: Lachs & Stifte mit Händen essen. Erwachsene finishen mit Meersalz & Thymian."}]}, {"id": "feb_w3", "title": "Februar-Mix (Geflügel, Kürbis & Polenta) - Familientopf Edition", "month": "Februar", "week": "Woche 3", "pantry": ["Basmatireis", "Fusilli", "Polenta", "Senf", "Tomatenmark"], "rewe": ["1x Hähnchenbrust (400g)", "1x Salsiccia/Bratwurst (200g)", "1x Hokkaido", "1x Pastinaken", "1x Schmand", "1x Grana Padano"], "meals": [{"day": "Tag 1 (Schnell)", "name": "Hähnchenbrust-Streifen in milder Senf-Rahmsauce mit Reis", "ingredients": ["Reis", "Hähnchenbrust", "Senf", "Schmand"], "steps": ["Hähnchen streifig schneiden, anbraten, mit Brühe, Senf & Schmand 5 Min. einköcheln."], "kniff": "Senf-Emulsion: Bindet Fett & Brühe ohne Mehlschwitze.", "baby": "Familientisch: Zarte Streifen & Reis. Erwachsene ergänzen am Tisch scharfen Senf."}, {"day": "Tag 2 (Schnell)", "name": "Fusilli mit cremigem Kürbis-Mascarpone-Glaze", "ingredients": ["Fusilli", "Kürbis", "Schmand/Mascarpone"], "steps": ["Kürbis anbraten, mit Schmand & Nudelwasser glatt rühren.", "Fusilli unterheben."], "kniff": "Glaze haftet wie ein Samtmantel an Fusilli.", "baby": "Familientisch: Fusilli fangen Creme auf. Erwachsene toppen mit knusprigem Salbei."}, {"day": "Tag 3 (Schnell)", "name": "Gebackene Pastinaken-Pommes mit Kräuter-Dip", "ingredients": ["Pastinakenstifte", "Olivenöl", "Schmand"], "steps": ["Pastinakenstifte im Ofen 20 Min. rösten.", "Mit Kräuter-Schmand dippen."], "kniff": "Dry Roasting setzt natürliche Süße der Pastinake frei.", "baby": "Familientisch: Gesundes Fingerfood. Erwachsene würzen Dip mit Piment d'Espelette."}, {"day": "Tag 4 (Das Highlight)", "name": "Geschmorte Salsiccia-Bällchen in Tomaten-Ragu auf Polenta", "ingredients": ["Polenta", "Salsiccia-Bällchen", "Tomatenmark"], "steps": ["Polenta nach Packungsanweisung cremig rühren.", "Salsiccia-Bällchen anbraten, Tomatenmark anrösten & einköcheln.", "Auf der Polenta anrichten."], "kniff": "Tomatenmark-Karamellisierung entzieht Säure & erzeugt Umami.", "baby": "Familientisch: Cremige Polenta & zarte Bällchen. Erwachsene ergänzen Maldon-Salz."}]}, {"id": "feb_w4", "title": "Februar-Mix (Blumenkohl, Linsen & Hähnchen) - Familientopf Edition", "month": "Februar", "week": "Woche 4", "pantry": ["Rote Linsen", "Tagliatelle", "Süßkartoffeln", "Brotbrösel"], "rewe": ["1x Hähnchenbrust (Zwischeneinkauf Tag 3/4, 400g)", "1x Blumenkohl & Brokkoli", "1x Bund Möhren", "1x Champignons (250g)", "1x Schmand", "1x Bio-Zitrone"], "meals": [{"day": "Tag 1 (Schnell)", "name": "Bunter Blumenkohl-Brokkoli-Gratin-Wok mit Knusper-Pangrattato", "ingredients": ["Blumenkohl & Brokkoli", "Schmand", "Brotbrösel"], "steps": ["Röschen blanchieren, in Butter & Schmand schwenken.", "Brotbrösel in Öl rösten und darüberstreuen."], "kniff": "Pangrattato-Kontrast: Krosse Brösel bringen Biss zu weichem Gemüse.", "baby": "Familientisch: Weiche Röschen greifen. Erwachsene streuen Knoblauch-Pangrattato drüber."}, {"day": "Tag 2 (Schnell)", "name": "Seidiges Süßkartoffel-Linsen-Dal mit Orangen-Kick", "ingredients": ["Süßkartoffel", "Rote Linsen", "Orangensaft"], "steps": ["Süßkartoffel anbraten, Linsen & Brühe 15 Min. köcheln.", "Mit Orangensaft abrunden."], "kniff": "Säure-Balancierung: Fruchtsaft verleiht Linsen Leichtigkeit.", "baby": "Familientisch: Sämiger mild-süßer Eintopf. Erwachsene ergänzen Koriander & Chili."}, {"day": "Tag 3 (Schnell)", "name": "Tagliatelle mit Champignon-Rahm & Zitronenzeste", "ingredients": ["Tagliatelle", "Champignons", "Schmand", "Zitrone"], "steps": ["Tagliatelle kochen.", "Pilze trocken braun anbraten, Schmand & Zitronenzeste zugeben."], "kniff": "Trocken Anbraten: Pilze erst ohne Salz rösten für saftigen Biss.", "baby": "Familientisch: Milde Nudeln & Pilze. Erwachsene finishen mit Zitronenzeste & Pfeffer."}, {"day": "Tag 4 (Das Highlight)", "name": "Knuspriges Ofen-Hähnchen mit Möhren-Stiften & Süßkartoffel-Stampf", "ingredients": ["Hähnchen", "Möhrenstifte", "Süßkartoffeln", "Butter"], "steps": ["Hähnchen & Möhren im Ofen rösten.", "Süßkartoffeln zu Püree stampfen.", "Hähnchen & Möhren auf Stampf servieren."], "kniff": "Glazur & Samtstampf: Honig schützt Hähnchen, Süßkartoffel wird samtig.", "baby": "Familientisch: Weicher Stampf & Stifte. Erwachsene ergänzen Harissa & Kürbiskerne."}]}];
-        const DEFAULT_PIN = "1234";
 
         let currentData = initialData;
-        try {
-            const saved = localStorage.getItem('hh_kochbox_data');
-            if (saved) currentData = JSON.parse(saved);
-        } catch (e) {
-            console.error("Local data corrupted, falling back to initial data.", e);
-            currentData = initialData;
-        }
-        let activePin = DEFAULT_PIN;
-        try { activePin = localStorage.getItem('hh_app_pin') || DEFAULT_PIN; } catch(e){}
-        let isUnlocked = true; // Hardcoded true since PIN is removed
         
         let selectedWeekId = currentData[0].id;
         try {
@@ -214,70 +225,9 @@
                 selectedWeekId = savedWeek;
             }
         } catch(e) {}
+        
         let babyMode = true;
         try { babyMode = localStorage.getItem('hh_baby_mode') !== 'false'; } catch(e){}
-
-        function checkLockStatus() {
-            const overlay = document.getElementById('pinOverlay');
-            if (!overlay) return;
-            if (isUnlocked) {
-                overlay.style.display = 'none';
-                initApp();
-            } else {
-                overlay.style.display = 'flex';
-                const inp = document.getElementById('pinInput');
-                if (inp) inp.focus();
-            }
-        }
-
-        function verifyPin(evt) {
-            if (evt) {
-                evt.preventDefault();
-                if (evt.stopPropagation) evt.stopPropagation();
-            }
-            const inputEl = document.getElementById('pinInput');
-            if (!inputEl) return false;
-
-            const input = inputEl.value.trim();
-            let currentActivePin = DEFAULT_PIN;
-            try {
-                currentActivePin = localStorage.getItem('hh_app_pin') || DEFAULT_PIN;
-            } catch(e) {}
-
-            if (input === currentActivePin || input === DEFAULT_PIN || input === "1234") {
-                isUnlocked = true;
-                try { sessionStorage.setItem('hh_is_unlocked', 'true'); } catch(e){}
-                document.getElementById('pinOverlay').style.display = 'none';
-                const err = document.getElementById('pinError');
-                if (err) err.style.display = 'none';
-                initApp();
-            } else {
-                const err = document.getElementById('pinError');
-                if (err) err.style.display = 'block';
-                inputEl.value = '';
-                inputEl.focus();
-            }
-            return false;
-        }
-
-        function lockApp() {
-            isUnlocked = false;
-            sessionStorage.removeItem('hh_is_unlocked');
-            document.getElementById('pinInput').value = '';
-            document.getElementById('pinOverlay').style.display = 'flex';
-        }
-
-        function changePin() {
-            const newPin = document.getElementById('newPinInput').value.trim();
-            if (newPin.length >= 4) {
-                activePin = newPin;
-                localStorage.setItem('hh_app_pin', newPin);
-                alert("PIN erfolgreich geändert! Neuer PIN: " + newPin);
-                document.getElementById('newPinInput').value = '';
-            } else {
-                alert("Bitte einen PIN mit mindestens 4 Zeichen eingeben.");
-            }
-        }
 
         function initApp() {
             renderWeekSelector();
@@ -314,38 +264,113 @@
             btn.classList.toggle('active', babyMode);
         }
 
+        function toggleRecipe(idx) {
+            const body = document.getElementById('meal-body-' + idx);
+            const chevron = document.getElementById('chevron-' + idx);
+            if (body.classList.contains('open')) {
+                body.classList.remove('open');
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                body.classList.add('open');
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function markAsCooked(weekId, idx, event) {
+            event.stopPropagation();
+            const cookedKey = 'hh_cooked_' + weekId;
+            let cookedState = JSON.parse(localStorage.getItem(cookedKey)) || {};
+            
+            // Toggle
+            cookedState[idx] = !cookedState[idx];
+            localStorage.setItem(cookedKey, JSON.stringify(cookedState));
+            
+            // If just marked as cooked, trigger emoji rain
+            if (cookedState[idx]) {
+                triggerEmojiRain();
+            }
+            
+            renderCurrentWeek();
+        }
+
+        function triggerEmojiRain() {
+            const emojis = ['🥕', '🥦', '🍅', '🍄', '🧅', '🍠', '🥬', '🌽', '🍆', '🎉'];
+            for(let i=0; i<45; i++) {
+                let el = document.createElement('div');
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.className = 'emoji-rain';
+                el.style.left = (Math.random() * 100) + 'vw';
+                el.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                el.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 4000);
+            }
+        }
+
         function renderCurrentWeek() {
             const week = currentData.find(w => w.id === selectedWeekId) || currentData[0];
+            const cookedState = JSON.parse(localStorage.getItem('hh_cooked_' + week.id)) || {};
             
+            // Find the first meal that is not cooked to auto-expand it
+            let firstUncooked = week.meals.findIndex((m, i) => !cookedState[i]);
+            if (firstUncooked === -1) firstUncooked = 0; // fallback if all cooked
+
             const mealsContainer = document.getElementById('mealsContainer');
-            mealsContainer.innerHTML = week.meals.map((m, mIdx) => `
-                <div class="card">
-                    <div class="card-header">
-                        <div>
+            mealsContainer.innerHTML = week.meals.map((m, idx) => {
+                const isCooked = cookedState[idx];
+                const isOpen = !isCooked && idx === firstUncooked;
+                
+                // Determine Badges
+                const isMeat = m.ingredients.some(i => /Hähnchen|Hack|Salsiccia|Bacon|Bratwurst|Wurst|Fleisch/i.test(i));
+                const isFish = m.ingredients.some(i => /Lachs|Kabeljau|Skrei|Fisch/i.test(i));
+                const typeBadge = isMeat ? '<span class="badge badge-meat">🥩 Fleisch</span>' :
+                                  isFish ? '<span class="badge badge-fish">🐟 Fisch</span>' :
+                                  '<span class="badge badge-veggie">🥕 Veggie</span>';
+                
+                const timeBadge = (m.day.includes("Schnell") || m.name.includes("Blitz") || m.day.includes("Mittag")) 
+                                  ? '<span class="badge badge-time">⏱️ Schnell</span>' : '';
+
+                return `
+                <div class="card ${isCooked ? 'is-cooked' : ''}">
+                    <div class="card-header" onclick="toggleRecipe(${idx})">
+                        <div class="card-header-left">
                             <div class="day-badge">${m.day}</div>
                             <div class="meal-title">${m.name}</div>
+                            <div class="badge-container">
+                                ${typeBadge} ${timeBadge}
+                            </div>
+                        </div>
+                        <div id="chevron-${idx}" style="font-size: 1.5rem; color: #bbb; transition: transform 0.3s; transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}">
+                            🔽
                         </div>
                     </div>
-                    <div class="section-title">Zutaten</div>
-                    <div class="ingredients-list">
-                        ${m.ingredients.map(ing => `<span class="ing-chip">${ing}</span>`).join('')}
+                    <div class="card-body ${isOpen ? 'open' : ''}" id="meal-body-${idx}">
+                        <div class="section-title">Zutaten</div>
+                        <div class="ingredients-list">
+                            ${m.ingredients.map(ing => `<span class="ing-chip">${ing}</span>`).join('')}
+                        </div>
+                        <div class="section-title">Zubereitung</div>
+                        <div>
+                            ${m.steps.map((s, sIdx) => `
+                                <div class="step-item" onclick="this.classList.toggle('completed')">
+                                    <div class="step-num">${sIdx + 1}</div>
+                                    <div class="step-text">${s}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${m.kniff ? `<div class="kniff-box">💡 <strong>Gastro-Kniff:</strong> ${m.kniff}</div>` : ''}
+                        ${m.baby ? `<div class="baby-box ${babyMode ? 'visible' : ''}">👶 <strong>Baby-Share / Familientisch:</strong> ${m.baby}</div>` : ''}
+                        
+                        <button class="gekocht-btn ${isCooked ? 'cooked' : ''}" onclick="markAsCooked('${week.id}', ${idx}, event)">
+                            ${isCooked ? '🔄 Doch nicht gekocht' : '✅ Gericht gekocht!'}
+                        </button>
                     </div>
-                    <div class="section-title">Zubereitung</div>
-                    <div>
-                        ${m.steps.map((s, idx) => `
-                            <div class="step-item" onclick="this.classList.toggle('completed')">
-                                <div class="step-num">${idx + 1}</div>
-                                <div class="step-text">${s}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    ${m.kniff ? `<div class="kniff-box">💡 <strong>Gastro-Kniff:</strong> ${m.kniff}</div>` : ''}
-                    ${m.baby ? `<div class="baby-box ${babyMode ? 'visible' : ''}">👶 <strong>Baby-Share / Familientisch:</strong> ${m.baby}</div>` : ''}
                 </div>
-            `).join('');
+                `;
+            }).join('');
 
+            // Render shopping lists (remains same)
             const checkedState = JSON.parse(localStorage.getItem('hh_checked_' + week.id)) || {};
-            
             document.getElementById('reweList').innerHTML = week.rewe.map((item, idx) => `
                 <div class="check-item ${checkedState['rewe_' + idx] ? 'done' : ''}" onclick="toggleCheck('${week.id}', 'rewe_${idx}', this)">
                     <input type="checkbox" ${checkedState['rewe_' + idx] ? 'checked' : ''}>
@@ -359,8 +384,6 @@
                     <span>${item}</span>
                 </div>
             `).join('');
-
-            
         }
 
         function toggleCheck(weekId, key, el) {
@@ -371,7 +394,7 @@
             el.querySelector('input').checked = checkedState[key];
         }
 
-                function copyShoppingList() {
+        function copyShoppingList() {
             const week = currentData.find(w => w.id === selectedWeekId);
             const text = "🛒 Rewe Einkaufsliste (" + week.month + " " + week.week + "):\n" + week.rewe.map(i => "- " + i).join("\n");
             navigator.clipboard.writeText(text);
@@ -384,9 +407,9 @@
             });
             document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
             tabEl.classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
@@ -394,7 +417,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', initApp);
-    if(document.readyState === 'complete' || document.readyState === 'interactive') { initApp(); }
+        if(document.readyState === 'complete' || document.readyState === 'interactive') { initApp(); }
     </script>
 </body>
 </html>
