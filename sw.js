@@ -1,9 +1,10 @@
-const CACHE_NAME = 'kochbox-cache-v7';
+const CACHE_NAME = 'kochbox-cache-v9';
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
-    './icon.svg'
+    './icon.svg',
+    'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js'
 ];
 
 self.addEventListener('install', event => {
