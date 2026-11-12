@@ -152,17 +152,25 @@
             </div>
         </div>
 
-        <div id="adminView" style="display:none;">
+        <div id="infoView" style="display:none;">
             <div class="card">
-                <div class="meal-title">⚙️ Rezepte & Einstellungen</div>
-                <p style="font-size:0.85rem; color: var(--text-muted); margin: 8px 0 14px 0;">
-                    Hier kannst du die Rezeptdaten anpassen.
+                <div class="meal-title">ℹ️ Über die Kochbox</div>
+                <p style="font-size:0.95rem; color: var(--text-muted); margin: 8px 0 16px 0;">
+                    Willkommen bei der Hello Home Kochbox! Diese App nimmt dir die Einkaufs- und Wochenplanung ab.
                 </p>
-
-                <div class="section-title">Rezept-Daten (JSON)</div>
-                <textarea class="json-editor" id="jsonInput"></textarea>
-                <button class="btn" onclick="saveCustomData()">Änderungen lokal speichern</button>
-                <button class="btn" style="background:#757575;" onclick="resetData()">Auf Standard zurücksetzen</button>
+                
+                <div class="section-title">Die Idee</div>
+                <p style="font-size:0.9rem; margin-bottom: 16px; color: var(--text);">
+                    <strong>Einmal einkaufen, clever kombinieren:</strong> Frische Zutaten werden so über die Woche verteilt, dass kaum Reste bleiben (Smart Pantry). Wir setzen auf einen Mix aus schnellen Alltagsgerichten und echten Highlights am Wochenende.
+                </p>
+                
+                <div class="section-title">Wie es funktioniert</div>
+                <ul style="font-size:0.9rem; padding-left: 20px; margin-bottom: 12px; color: var(--text);">
+                    <li style="margin-bottom: 8px;"><strong>Einkaufen:</strong> Du machst einen Haupteinkauf. Achte bei der Liste auf den Vermerk <em>(Zwischeneinkauf Tag 3/4)</em> bei frischem Fisch oder Geflügel.</li>
+                    <li style="margin-bottom: 8px;"><strong>Frische-Reihenfolge:</strong> Koche die Gerichte idealerweise in der Reihenfolge von Tag 1 bis 4. Leicht verderbliche Zutaten wie rohes Hack oder Fisch sind immer für den Wochenstart (Tag 1 & 2) eingeplant.</li>
+                    <li style="margin-bottom: 8px;"><strong>Gastro-Kniffe 💡:</strong> Kleine Zubereitungs-Tricks, die dein Essen wie im Restaurant schmecken lassen (z.B. Emulgieren, Röstaromen nutzen).</li>
+                    <li style="margin-bottom: 8px;"><strong>Familientisch 👶:</strong> Mit eingeschaltetem Baby-Modus siehst du bei jedem Rezept sofort, wie du ungesalzene oder ungewürzte Komponenten sicher abzweigen kannst.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -176,9 +184,9 @@
             <span class="tab-icon">🛒</span>
             <span>Einkaufen</span>
         </button>
-        <button class="tab-item" onclick="switchView('adminView', this)">
-            <span class="tab-icon">⚙️</span>
-            <span>Bearbeiten</span>
+        <button class="tab-item" onclick="switchView('infoView', this)">
+            <span class="tab-icon">ℹ️</span>
+            <span>Info</span>
         </button>
     </nav>
 
@@ -351,7 +359,7 @@
                 </div>
             `).join('');
 
-            document.getElementById('jsonInput').value = JSON.stringify(currentData, null, 2);
+            
         }
 
         function toggleCheck(weekId, key, el) {
@@ -370,31 +378,14 @@
         }
 
         function switchView(viewId, tabEl) {
-            ['recipesView', 'pantryView', 'adminView'].forEach(id => {
+            ['recipesView', 'pantryView', 'infoView'].forEach(id => {
                 document.getElementById(id).style.display = (id === viewId) ? 'block' : 'none';
             });
             document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
             tabEl.classList.add('active');
         }
 
-        function saveCustomData() {
-            try {
-                const parsed = JSON.parse(document.getElementById('jsonInput').value);
-                currentData = parsed;
-                localStorage.setItem('hh_kochbox_data', JSON.stringify(currentData));
-                alert("Daten erfolgreich lokal gespeichert!");
-                initApp();
-            } catch(e) {
-                alert("Fehler im JSON-Format: " + e.message);
-            }
-        }
-
-        function resetData() {
-            if(confirm("Möchtest du alle Anpassungen auf den Originalzustand zurücksetzen?")) {
-                localStorage.removeItem('hh_kochbox_data');
-                currentData = initialData;
-                initApp();
-            }
+        
         }
 
         
