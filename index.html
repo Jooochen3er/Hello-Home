@@ -7,7 +7,8 @@
     <meta name="theme-color" content="#2e7d32">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Hello%20Home%20Kochbox%22%2C%22short_name%22%3A%22Kochbox%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f4f6f8%22%2C%22theme_color%22%3A%22%232e7d32%22%7D">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.svg">
     <style>
         :root {
             --primary: #2e7d32;
@@ -383,9 +384,6 @@
             });
             document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
             tabEl.classList.add('active');
-        }
-
-        
         }
 
         
