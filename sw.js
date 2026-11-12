@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kochbox-cache-v4';
+const CACHE_NAME = 'kochbox-cache-v7';
 const urlsToCache = [
     './',
     './index.html',
